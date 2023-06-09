@@ -1,0 +1,11 @@
+SELECT
+	a.nama AS cabkor,
+	b.nama AS cabang,
+	c.nama AS unit_kerja
+FROM
+	data_cabang a
+	JOIN data_cabang b
+		ON a.id = b.induk
+	JOIN data_cabang c
+		ON b.id = c.induk
+ORDER BY cabkor asc, cabang asc, unit_kerja asc

@@ -1,0 +1,26 @@
+-- Butuh function pembantu bila menggunakan PostgreSQL
+create function try_cast_to_date(p_in text)
+returns date 
+as $$
+begin
+    begin
+        return $1::date;
+    exception 
+        when others then return null;
+    end;
+end;
+$$
+language plpgsql;
+
+
+-- Querynya sebagai berikut :
+SELECT
+	id_nasabah,
+	kode_cabang,
+	nama_nasabah,
+	tanggal_lahir,
+	(try_cast_to_date(tanggal_lahir) is not null)as cek_tanggal
+FROM
+	data_nasabah
+
+-- Saya menggunakan snake karena saat menggunakan camel query bermasalah
