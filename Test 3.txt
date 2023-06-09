@@ -1,0 +1,47 @@
+-- Menggunakan CTE untuk tabel bantu
+WITH cte AS
+(
+SELECT
+	pekerjaan,
+	CASE
+		WHEN ((try_cast_to_date(tanggal_lahir) is not null) = true) THEN 
+		CASE
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int <= 14 THEN '01'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 15 AND 19 THEN '02'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 20 AND 24 THEN '03'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 25 AND 29 THEN '04'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 30 AND 34 THEN '05'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 35 AND 39 THEN '06'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 40 AND 44 THEN '07'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 45 AND 49 THEN '08'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 50 AND 54 THEN '09'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int BETWEEN 55 AND 59 THEN '10'
+			WHEN date_part('year',AGE(TO_DATE(tanggal_lahir,'YYYYMMDD')))::int >= 60 THEN '11'
+		END
+		ELSE
+		CASE
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int <= 14 THEN '01'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 15 AND 19 THEN '02'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 20 AND 24 THEN '03'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 25 AND 29 THEN '04'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 30 AND 34 THEN '05'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 35 AND 39 THEN '06'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 40 AND 44 THEN '07'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 45 AND 49 THEN '08'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 50 AND 54 THEN '09'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int BETWEEN 55 AND 59 THEN '10'
+			WHEN date_part('year',AGE(TO_DATE('19900101','YYYYMMDD')))::int >= 60 THEN '11'
+		END
+		END AS kelompok_usia
+FROM
+	data_nasabah
+)
+
+SELECT 
+	*, COUNT(1) AS total
+FROM 
+	cte
+GROUP BY 
+	pekerjaan,kelompok_usia
+ORDER BY 
+	pekerjaan asc, kelompok_usia asc 
